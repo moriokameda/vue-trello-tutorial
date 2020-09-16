@@ -1,13 +1,18 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <List v-for="list in lists" :key="list.id" :list="list" />
+    <template v-for="list in lists">
+      <div class="list-container" :key="list.id">
+        <List :list="list" @add-card="addCard" />
+      </div>
+    </template>
+    <input type="text" @change="addList" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import List from "@/components/List.vue";
+import List, { AddCardEvent } from "@/components/List.vue";
 import { IList } from "@/type";
 import { createInitialLists } from "@/initialData";
 
@@ -18,6 +23,36 @@ import { createInitialLists } from "@/initialData";
 })
 export default class App extends Vue {
   lists: IList[] = createInitialLists();
+  listCreateCount = createInitialLists().length;
+  cardCreateCount = 4;
+
+  addCard({ listId, text }: AddCardEvent): void {
+    const list = this.lists.find(list => list.id === listId);
+    /*
+    findは見つからなかった場合undefinedを返す可能性があるのでその場合は早期リターンをする
+    ここではlist: IList | undefined
+    */
+    if (list === undefined) {
+      return;
+    }
+    const newCard = {
+      id: this.cardCreateCount + 1,
+      text
+    };
+    list.cards.push(newCard);
+    ++this.cardCreateCount;
+  }
+  // 値を繰り返さない関数の返り値返り値の値としてvoid型を付与
+  addList(event: Event & { currentTarget: HTMLInputElement }): void {
+    const newList = {
+      id: this.listCreateCount + 1,
+      name: event.currentTarget.value,
+      cards: []
+    };
+    this.lists.push(newList);
+    ++this.listCreateCount;
+    event.currentTarget.value = "";
+  }
 }
 </script>
 

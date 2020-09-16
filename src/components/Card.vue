@@ -1,8 +1,12 @@
-<template>{{ card.text }}</template>
+<template>
+  <div>
+    {{ card.text }}
+  </div>
+</template>
 
 <script lang="ts">
-import { ICard } from "@/type";
 import { Component, Vue, Prop } from "vue-property-decorator";
+import { ICard } from "@/type";
 
 @Component
 export default class Card extends Vue {
@@ -10,3 +14,6 @@ export default class Card extends Vue {
   card!: ICard;
 }
 </script>
+<style lang="scss" scoped>
+
+</style>
