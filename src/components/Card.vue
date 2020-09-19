@@ -5,18 +5,32 @@
       @dblclick="onDoubleClick"
       @keypress.enter="onKeyPressEnter"
       @blur="onBlur"
-    >{{ card.text }}</div>
+    >
+      <Cross @click="removeCard" />
+      {{ card.text }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, PropSync } from "vue-property-decorator";
-import { ICard } from "@/type";
+import { Component, Vue, Prop, PropSync, Emit } from "vue-property-decorator";
+import Cross from "@/components/Cross.vue";
+import { ICard, IList } from "@/type";
 
-@Component
+export interface RemoveCardEvent {
+  listId: number;
+  cardId: number;
+}
+
+@Component({
+  components: {
+    Cross
+  }
+})
 export default class Card extends Vue {
   @Prop({ type: Object, required: true })
   readonly card!: ICard;
+  listId!: IList["id"];
 
   @PropSync("cardText", { type: String, required: true })
   syncedCardText!: ICard["text"];
@@ -38,6 +52,14 @@ export default class Card extends Vue {
     this.syncedCardText = event.currentTarget.innerText;
 
     this.contenteditable = false;
+  }
+
+  @Emit()
+  removeCard(): RemoveCardEvent {
+    return {
+      listId: this.listId,
+      cardId: this.card.id
+    };
   }
 }
 </script>

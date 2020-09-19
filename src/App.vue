@@ -1,12 +1,15 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <List v-for="list in lists"
-    :key="list.id"
-    class="list"
-    :list="list"
-    :listName.sync="list.name"
-    @add-cart="addCard"
+    <List
+      v-for="list in lists"
+      :key="list.id"
+      class="list"
+      :list="list"
+      :listName.sync="list.name"
+      @add-cart="addCard"
+      @remove-list="removeList"
+      @remove-card="removeCard"
     />
     <input type="text" @change="addList" />
   </div>
@@ -17,6 +20,7 @@ import { Component, Vue } from "vue-property-decorator";
 import List, { AddCardEvent } from "@/components/List.vue";
 import { IList } from "@/type";
 import { createInitialLists } from "@/initialData";
+import { RemoveCardEvent } from "@/components/Card.vue";
 
 @Component({
   components: {
@@ -54,6 +58,28 @@ export default class App extends Vue {
     this.lists.push(newList);
     ++this.listCreateCount;
     event.currentTarget.value = "";
+  }
+  removeList(listId: number): void {
+    const listIndex = this.lists.findIndex(list => list.id == listId);
+
+    // findIndexで見つからない場合は-1を返すのでその場合は早期リターン
+    if (listIndex === -1) {
+      return;
+    }
+
+    this.lists.splice(listIndex, 1);
+  }
+
+  removeCard({ listId, cardId }: RemoveCardEvent): void {
+    const list = this.lists.find(list => list.id == listId);
+    if (list === undefined) {
+      return;
+    }
+    const cardIndex = list.cards.findIndex(card => card.id === cardId);
+    if (cardIndex === -1) {
+      return;
+    }
+    list.cards.splice(cardIndex, 1);
   }
 }
 </script>
