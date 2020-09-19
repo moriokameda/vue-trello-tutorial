@@ -1,11 +1,13 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
-    <template v-for="list in lists">
-      <div class="list-container" :key="list.id">
-        <List :list="list" @add-card="addCard" />
-      </div>
-    </template>
+    <List v-for="list in lists"
+    :key="list.id"
+    class="list"
+    :list="list"
+    :listName.sync="list.name"
+    @add-cart="addCard"
+    />
     <input type="text" @change="addList" />
   </div>
 </template>
