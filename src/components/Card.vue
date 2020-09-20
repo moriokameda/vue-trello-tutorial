@@ -1,6 +1,7 @@
 <template>
   <div>
     <div
+      class="card-name"
       :contenteditable="contenteditable"
       @dblclick="onDoubleClick"
       @keypress.enter="onKeyPressEnter"
@@ -15,7 +16,7 @@
 <script lang="ts">
 import { Component, Vue, Prop, PropSync, Emit } from "vue-property-decorator";
 import Cross from "@/components/Cross.vue";
-import { ICard, IList } from "@/type";
+import { ICard, IList } from "@/types.ts";
 
 export interface RemoveCardEvent {
   listId: number;
@@ -30,6 +31,8 @@ export interface RemoveCardEvent {
 export default class Card extends Vue {
   @Prop({ type: Object, required: true })
   readonly card!: ICard;
+
+  @Prop({ type: Number, required: true })
   listId!: IList["id"];
 
   @PropSync("cardText", { type: String, required: true })
@@ -56,6 +59,8 @@ export default class Card extends Vue {
 
   @Emit()
   removeCard(): RemoveCardEvent {
+    console.log(this.listId);
+    console.log(this.card.id);
     return {
       listId: this.listId,
       cardId: this.card.id
@@ -64,4 +69,15 @@ export default class Card extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+.card {
+  border: 1px solid #000;
+
+  &-name {
+    position: relative;
+
+    > .cross {
+      right: 0;
+    }
+  }
+}
 </style>

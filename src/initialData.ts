@@ -1,4 +1,4 @@
-import { IList } from "@/type";
+import { IList } from "@/types";
 
 export function createInitialLists(): IList[] {
   return [

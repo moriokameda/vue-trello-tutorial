@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Emit } from "vue-property-decorator";
+import { Component, Vue, Emit } from "vue-property-decorator";
 
 @Component
 export default class Cross extends Vue {
@@ -11,16 +11,18 @@ export default class Cross extends Vue {
   click(): void {}
 }
 </script>
+
 <style lang="scss" scoped>
 .cross {
   display: inline-block;
   width: 16px;
   height: 16px;
   position: absolute;
+
   &:before,
   &:after {
     width: 100%;
-    border-top: 1px solid #000;
+    border-top: 1px solid #000000;
     position: absolute;
     top: 50%;
     content: "";
@@ -29,6 +31,7 @@ export default class Cross extends Vue {
   &:before {
     transform: rotate(-45deg);
   }
+
   &:after {
     transform: rotate(45deg);
   }
